@@ -3,31 +3,30 @@ const keywords = ["not", "and", "or"]
 // const or = (x, y) => x || y
 // const not = x => !x
 
-const parseInput = ({ input }) => {
-  let output = []
+const parseInput = (input) => {
+  // let output = []
   //input is split into arrays
   const chars = input.replace(/ and /g, "&").replace(/ or /g, "|").replace(/not /g, "!").split('')
-
-  
-  let curIndex = 0
-  while(curIndex <= input.length){
-    const char = input[curIndex]
-    if(char === '('){
-      const nextInput = chars.slice(curIndex + 1).join('')
-      output.push(
-        parseInput({
-          input: nextInput
-        })
-      )
-      curIndex = (curIndex + 1) + nextInput.indexOf(')')
-    } else if (char === ')') {
-      return output
-    } else {
-      output.push(char)
-    }
-    curIndex++
-  }
-  return output
+  return chars
+  // let curIndex = 0
+  // while(curIndex <= input.length){
+  //   const char = input[curIndex]
+  //   if(char === '('){
+  //     const nextInput = chars.slice(curIndex + 1).join('')
+  //     output.push(
+  //       parseInput({
+  //         input: nextInput
+  //       })
+  //     )
+  //     curIndex = (curIndex + 1) + nextInput.indexOf(')')
+  //   } else if (char === ')') {
+  //     return output
+  //   } else {
+  //     output.push(char)
+  //   }
+  //   curIndex++
+  // }
+  // return output
 }
 
 const generatePermutations = (variables = ['a', 'b', 'c']) => {
@@ -35,7 +34,7 @@ const generatePermutations = (variables = ['a', 'b', 'c']) => {
   for(let rows = 0; rows < Math.pow(2, variables.length); rows++){
     const combination = {}
     for(let i = 0; i < variables.length; i++){
-      combination[variables[i]] = (rows * i) % 2 === 0
+      combination[variables[i]] = (rows >> i) % 2 === 1
     }
     output.push(combination)
   }
@@ -60,10 +59,6 @@ const generatePermutations = (variables = ['a', 'b', 'c']) => {
 
 const input = '(a & b) & (c & (d & e))'
 
-// console.log(JSON.stringify(parseInput({ input }), null, 2))
-// test eval:
-// const STATEMENT = [[true, '&', false], '&', [false, '&', [true, '|', false]]]
-// console.log(eval(STATEMENT))
 
 const shunting_yard = (input) => {
   let stack = []
@@ -121,6 +116,3 @@ const evaluator = inputArray => {
     }
     return output[0]
 }
-
-const shunted = [true, true, '&', false, true, false, '|', '&', '&']
-evaluator(shunted)
