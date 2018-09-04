@@ -143,3 +143,6 @@ const evaluator = inputArray => {
     }
     return output[0]
 }
+
+const shunted = [true, true, '&', false, true, false, '|', '&', '&']
+evaluator(shunted)
