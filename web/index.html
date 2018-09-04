@@ -13,6 +13,7 @@
       id="input"
       type="text"
       placeholder="(a and b) and (c and (d or e))"
+      value="(a and b) and (c and (d or e))"
     />
     <button
       type="button"
@@ -21,12 +22,25 @@
       GENERATE
     </button>
   </div>
-  <script src="tt.js"></script>
+  <script src="tt2.js"></script>
   <script>
     const button = document.getElementById('generate')
     button.addEventListener('click', () => {
       const input = document.getElementById('input').value
-      
+      const parsedInput = parseInput(input)
+      const permutations = generatePermutations(
+        parsedInput.filter(el => !(['&', '|', '!', '(', ')'].includes(el)))
+      )
+      const output = permutations.map(row => {
+        const shunted = shunting_yard([...parsedInput])
+          .map(el => {
+            if(Object.keys(row).includes(el)){
+              return row[el]
+            }
+            return el
+          })
+        return evaluator(shunted)
+      })
     })
   </script>
 </body>
