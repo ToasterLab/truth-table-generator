@@ -6,7 +6,7 @@ const keywords = ["not", "and", "or"]
 const parseInput = ({ input }) => {
   let output = []
   //input is split into arrays
-  const chars = input.replace(/ and /g, "&").replace(/ or /g, "|").replace(/ not /g, "!").split('')
+  const chars = input.replace(/ and /g, "&").replace(/ or /g, "|").replace(/not /g, "!").split('')
 
   
   let curIndex = 0
@@ -42,10 +42,8 @@ const generatePermutations = (variables = ['a', 'b', 'c']) => {
   return output
 }
 
-const input = '(a and b) and not (c and (d or e))'
-
-console.log(JSON.stringify(parseInput({ input }), null, 2))
-console.log(generatePermutations())
+// console.log(JSON.stringify(parseInput({ input }), null, 2))
+// console.log(generatePermutations())
 
 /*
 
@@ -82,9 +80,41 @@ const eval  = (statement) => {
     }
   }
 }
-const input = '(a and b) and (c and (d or e))'
+const input = '(a & b) & (c & (d & e))'
 
 // console.log(JSON.stringify(parseInput({ input }), null, 2))
 // test eval:
-const STATEMENT = [[true, '&', false], '&', [false, '&', [true, '|', false]]]
-console.log(eval(STATEMENT))
+// const STATEMENT = [[true, '&', false], '&', [false, '&', [true, '|', false]]]
+// console.log(eval(STATEMENT))
+
+const shunting_yard = (input) => {
+  let stack = []
+  let queue = []
+  const operators = ['!', '&', '|']
+
+
+  while (input) {
+    const el = input.shift()
+    // console.log(el)
+    // console.log(stack)
+    // console.log(queue)
+    if (operators.includes(el)) {
+      while (stack.slice(-1)[0] === '!' && stack.slice(-1)[0] !== '(') {
+        queue.push(stack.pop())
+      }
+      stack.push(el)
+    } else if (el === ')') {
+      while(stack.slice(-1)[0] !== '(' && stack) {
+        queue.push(stack.pop())
+      }
+      stack.pop()
+    } else if (el === '(') {
+      stack.push(el)
+    } else {
+      queue.push(el)
+    }
+  }
+  return queue.push(...stack.reverse())
+}
+
+shunting_yard(input.split(''))
