@@ -121,4 +121,25 @@ const shunting_yard = (input) => {
   return queue.concat(stack.reverse())
 }
 
-console.log(shunting_yard(input.split('')))
+const evaluator = inputArray => {
+    // 
+    let output = []
+    while (inputArray.length > 0) {
+        const first = inputArray.shift()
+        if(first === '!') {
+            const last = output.pop()
+            output.push(!last)
+        } else if (first === '&') {
+            const last1 = output.pop()
+            const last2 = output.pop()
+            output.push(last1 && last2)
+        } else if (first === '|') {
+            const last1 = output.pop()
+            const last2 = output.pop()
+            output.push(last1 || last2)
+        } else {
+            output.push(first)
+        }
+    }
+    return output[0]
+}
