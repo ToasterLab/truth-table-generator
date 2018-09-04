@@ -92,20 +92,24 @@ const shunting_yard = (input) => {
   let queue = []
   const operators = ['!', '&', '|']
 
-
-  while (input) {
+  while (input.length > 0) {
     const el = input.shift()
-    // console.log(el)
-    // console.log(stack)
-    // console.log(queue)
     if (operators.includes(el)) {
       while (stack.slice(-1)[0] === '!' && stack.slice(-1)[0] !== '(') {
-        queue.push(stack.pop())
+        const toPop = stack.pop()
+        if(!toPop){
+          throw Error('oh noes')
+        }
+        queue.push(toPop)
       }
       stack.push(el)
     } else if (el === ')') {
       while(stack.slice(-1)[0] !== '(' && stack) {
-        queue.push(stack.pop())
+        const toPop = stack.pop()
+        if(!toPop){
+          throw Error('oh noes')
+        }
+        queue.push(toPop)
       }
       stack.pop()
     } else if (el === '(') {
@@ -114,7 +118,7 @@ const shunting_yard = (input) => {
       queue.push(el)
     }
   }
-  return queue.push(...stack.reverse())
+  return queue.concat(stack.reverse())
 }
 
-shunting_yard(input.split(''))
+console.log(shunting_yard(input.split('')))
