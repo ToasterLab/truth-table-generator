@@ -57,29 +57,7 @@ const generatePermutations = (variables = ['a', 'b', 'c']) => {
   { a: true, b: true, c: true } ]
 
 */
-const eval  = (statement) => {
-  if (statement.length === 1) {
-    return statement[0]
-  }
-  for (let i = 0; i < statement.length; i++) {
-    const prev = Array.isArray(statement[i-1]) ? statement[i-1] : [statement[i-1]]
-    const next = Array.isArray(statement[i-1]) ? statement[i+1] : [statement[i+1]]
-    if (statement[i] === '&') {
-      let p = eval(prev) 
-      let q = eval(next)
-      return p && q
-    } else if (statement[i] === '|') {
-      let p = eval(prev)
-      let q = eval(next)
-      return p || q
-    }
-  }
-  for (let i = 0; i < statement.length; i++) {
-    if (statement[i] === '&') {
-      return !eval(next)
-    }
-  }
-}
+
 const input = '(a & b) & (c & (d & e))'
 
 // console.log(JSON.stringify(parseInput({ input }), null, 2))
