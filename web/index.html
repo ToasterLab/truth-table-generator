@@ -5,11 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Truth Table</title>
+  <link rel="stylesheet" type="text/css" href="styles.css" />
 </head>
 <body>
   <div class="container">
-    
+    <input
+      id="input"
+      type="text"
+      placeholder="(a and b) and (c and (d or e))"
+    />
+    <button
+      type="button"
+      id="generate"
+    >
+      GENERATE
+    </button>
   </div>
   <script src="tt.js"></script>
+  <script>
+    const button = document.getElementById('generate')
+    button.addEventListener('click', () => {
+      const input = document.getElementById('input').value
+      
+    })
+  </script>
 </body>
 </html>
