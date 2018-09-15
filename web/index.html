@@ -9,22 +9,72 @@
 </head>
 <body>
   <div class="container">
-    <input
-      id="input"
-      type="text"
-      placeholder="(a and b) and (c and (d or e))"
-      value="(a and b) and (c and (d or e))"
-    />
-    <button
-      type="button"
-      id="generate"
-    >
-      GENERATE
-    </button>
+    <div class="title-container">
+      <h1>Truth Table Generator</h1>
+    </div>
+    <div class="input-container">
+        <input
+        id="input"
+        type="text"
+        placeholder="(a and b) and (c and (d or e))"
+        value="(a and b) and (c and (d or e))"
+      />
+    </div>
+    <div class="button-container">
+        <button
+          type="button"
+          id="generate"
+        >
+          GENERATE
+        </button>
+    </div>
+    <div id="output">
+      
+    </div>
   </div>
   <script src="tt2.js"></script>
   <script>
     const button = document.getElementById('generate')
+
+    const generateTable = (content) => {
+      const div = document.getElementById('output')
+      const table = document.createElement('table')
+      table.classList.add('output-table')
+      const tableBody = document.createElement('tbody')
+
+      // header
+      const tableHead = document.createElement('thead')
+      const tableHeadRow = document.createElement('tr')
+      for(let a = 0; a < Object.keys(content[0]).length; a++){
+        const th = document.createElement('th')
+        const header = Object.keys(content[0])[a]
+        th.appendChild(document.createTextNode(header))
+        tableHeadRow.appendChild(th)
+      }
+      tableHead.appendChild(tableHeadRow)
+      table.appendChild(tableHead)
+
+      for(let i = 0; i < content.length; i++){
+        const tr = document.createElement('tr')
+        const row = content[i]
+        for(let j = 0; j < Object.keys(row).length; j++){
+          const cell = row[Object.keys(row)[j]]
+          const td = document.createElement('td')
+          if(cell === true){
+            td.classList.add('cell-true')
+            td.appendChild(document.createTextNode('TRUE'))
+          } else if(cell === false){
+            td.classList.add('cell-false')
+            td.appendChild(document.createTextNode('FALSE'))
+          }
+          tr.appendChild(td)
+        }
+        tableBody.appendChild(tr)
+      }
+      table.appendChild(tableBody)
+      div.appendChild(table)
+    }
+
     button.addEventListener('click', () => {
       const input = document.getElementById('input').value
       const parsedInput = parseInput(input)
@@ -39,8 +89,9 @@
             }
             return el
           })
-        return evaluator(shunted)
+        return { ...row, result: evaluator(shunted) }
       })
+      generateTable(output)
     })
   </script>
 </body>
